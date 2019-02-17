@@ -1,3 +1,5 @@
+import os
+import cv2
 import pandas as pd
 import numpy as np
 from sklearn.cluster import MeanShift # as ms
@@ -5,6 +7,20 @@ from sklearn.datasets.samples_generator import make_blobs
 import matplotlib.pyplot as plt
 from collections import Counter
 
+keyword = input("Search: ");
+PATH = "data/"
+
+for category in os.listdir(PATH):
+	if category == keyword:
+		path = os.path.join(PATH,category)
+		for image in os.listdir(path):
+			img = cv2.imread(os.path.join(path,image))
+			img = cv2.resize(img,(200,200))
+			cv2.imshow(category, img)
+			cv2.waitKey(1000)
+			
+
+#cv2.destroyAllWindows()
 
 centers = [[1,1],[5,5],[8,4]]
 
@@ -14,8 +30,8 @@ X = dataset.iloc[:,[2,3]].values
 y = dataset.iloc[:,[0]].values
 name = dataset['Item_names'].tolist()
 
-plt.scatter(X[:,0], X[:,1])
-plt.show()
+#plt.scatter(X[:,0], X[:,1])
+#plt.show()
 
 ms = MeanShift()
 ms.fit(X)
@@ -72,7 +88,7 @@ for i in range(len(suggest)):
 n_clusters_ = len(np.unique(labels))
 
 #print("Number of estimated clusters: ", n_clusters_)
-
+suggest = 10
 colors = 10*['r.','g.','b.','c.','k.','y.','m.']
 
 #print(colors)
@@ -87,4 +103,14 @@ plt.scatter(cluster_centers[:,0],cluster_centers[:,1], marker = "x", s=150, line
 item_name = dict(zip(new_Y, new_name))
 #print("item_name   ", item_name)
 
+
+print("Recommendations::")
+for i in range(suggest):
+	print("Item ID- {}   Item name- {}".format(new_Y[i],new_name[i]))
+
+
 plt.show()
+
+	
+
+
